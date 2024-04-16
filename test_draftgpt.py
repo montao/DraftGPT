@@ -3,12 +3,12 @@ import os
 import requests
 
 
-def draft_gpt(openai_api_key=os.environ["OPENAI_API_KEY"]):
+def draft_gpt(openai_api_key=os.environ["OPENAI_API_KEY"], gpt_model=os.environ["GPT_MODEL"]):
 
     if openai_api_key is None:
         raise ValueError("OpenAI API key is not set in environment variables.")
 
-    with open("incident_description.txt", "r") as file:
+    with open("incident_descriptions/incident_description.txt", "r") as file:
         incident_desc = file.read().replace("\n", "")
 
     url = "https://api.openai.com/v1/chat/completions"
@@ -19,9 +19,9 @@ def draft_gpt(openai_api_key=os.environ["OPENAI_API_KEY"]):
     }
 
     data = {
-        "model": "gpt-3.5-turbo",
+        "model": gpt_model,
         "messages": [
-            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "system", "content": "You are responsible for analyzing incident root causes at a software engineering company. Your tasks include extracting messages from users and systems and then determining the root cause of the incident in the incident report."},
             {
                 "role": "user",
                 "content": incident_desc,
